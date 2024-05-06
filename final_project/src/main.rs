@@ -6,9 +6,10 @@ mod similarity;
 use csv::ReaderBuilder;
 use std::fs::File;
 use std::io::BufReader;
-use crate::movie::Movie;
-use crate::actor::Actor;
-use crate::graph::Graph;
+use movie::Movie;
+use actor::Actor;
+use graph::Graph;
+use similarity::calculate_jaccard_similarity;
 use anyhow::{Result, Context};
 use serde::Deserialize;
 
@@ -32,5 +33,11 @@ fn main() -> Result<()> {
         graph.add_movie_actor(movie, actor);
     }
 
-    // will add more code here as needed (most likely print statements for results)
+    let (most_similar, similarity_score) = graph.find_most_similar_movies();
+    let (least_similar, dissimilarity_score) = graph.find_least_similar_movies();
+
+    println!("Most Similar Movies: {:?} with similarity score: {}", most_similar, similarity_score);
+    println!("Least Similar Movies: {:?} with dissimilarity score: {}", least_similar, dissimilarity_score);
+
+    Ok(())
 }
